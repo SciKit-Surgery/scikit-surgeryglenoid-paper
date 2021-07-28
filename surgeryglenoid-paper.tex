@@ -1,0 +1,116 @@
+
+
+% This is mymiccaipaper.tex the demonstration file of
+% MICCAI 2006 for Latex2e
+% adapted from LLNCS.DEM from
+% the LaTeX macro package from Springer-Verlag
+% for Lecture Notes in Computer Science,
+% version 2.2 for LaTeX2e
+%
+%\documentclass[runningheads]{llncs}
+\documentclass[a4paper, lmargin=1.925cm, rmargin=1.925cm,tmargin=2.54cm,bmargin=4.94cm]{spie}
+%
+\usepackage{makeidx}  % allows for indexgeneration
+%st added this to help with anonymisation
+%otherwise it took my name from one of the eps file
+%This still got overwritten by the last eps file,
+%had to manually pull the author out of that.
+\pdfinfo{
+%letterpaper,
+%colorlinks,
+%urlcolor=black,
+pdfpagemode=none,
+pdftitle={SciKit-SurgeryGlenoid},
+pdfauthor={Stephen Thompson},
+pdfcreator={},
+pdfsubject={},
+pdfkeywords={}
+}
+		  
+%
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{array}
+\usepackage{pifont}
+\usepackage{url}
+\usepackage{hyperref}
+
+%this is trying to make a nice code listing box
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    xleftmargin=4.0ex
+}
+
+\lstset{style=mystyle}
+
+
+\graphicspath{{pics/}{figs/}}
+% list here all the paths to your figure folders
+\usepackage{glossaries} %st - put this in to deal with acronyms tidily
+%\usepackage[acronym=true,description]{glossaries} %st - put this in to deal with acronyms tidily
+\include{acronyms} %removed relative path and replaced with symbolic link in this directory, see makefile.
+
+\newcommand{\sksurgery}{SciKit-Surgery }
+\newcommand{\core}{SciKit-SurgeryCore }
+\begin{document}
+%
+%\frontmatter          % for the preliminaries
+%
+%\authorrunning{S. Thompson et al.}   % abbreviated author list (for running head)
+%\pagestyle{headings}  % switches on printing of running heads
+%\pagestyle{empty}  % switches off printing of running heads
+\pagestyle{plain}
+%
+%\mainmatter              % start of your contributions
+%
+\title{SciKit-SurgeryGlenoid, an Open Source Toolkit for Glenoid Version Measurement}
+\titlerunning{SciKit-SurgeryGlenoid}  % abbreviated title (for running head)
+%
+\author{Asta~Olafsdottir\supit{1}, Addie~Majed\supit{2}, David~Butt\supit{2}, Stephen~Thompson\supit{1}
+\skiplinehalf
+\supit{1}Wellcome/EPSRC Centre for Interventional and Surgical Science, University College London, United Kingdom \\
+\supit{2}The Royal National Orthopaedic Hospital NHS Trust\\
+}
+
+\maketitle              % typeset the title of the contribution
+
+\begin{abstract}
+\input{abstract_250}
+\end{abstract}
+
+\input{introduction}
+\input{methods}
+\input{results}
+\input{discussion}
+\input{acknowledgements}
+%\bibliographystyle{spie2008/myspiebib}
+\bibliographystyle{spmpsci}
+
+\bibliography{surgeryglenoid-paper.bib}
+
+\end{document}
