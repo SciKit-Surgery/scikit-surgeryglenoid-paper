@@ -1,0 +1,9 @@
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.pdf
+*.log
+*.out
+dependency_graph.dot
+dependency_graph.eps
