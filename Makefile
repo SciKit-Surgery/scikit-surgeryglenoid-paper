@@ -39,6 +39,10 @@ build/surgeryglenoid-paper.html : surgeryglenoid-paper.tex $(EXTERNALS) $(INPUTS
 %.pdf : %.dvi
 	dvipdf $<
 
+%.docx: %.tex surgeryglenoid-paper.bib
+	pandoc $< --bibliography=surgeryglenoid-paper.bib -V geometry:margin=2cm -V fontsize:11pt -o $@
+
+
 dependency_graph.png : dependency_graph.dot
 	dot -Tpng dependency_graph.dot -o dependency_graph.png
 

@@ -1,12 +1,24 @@
 %https://spie.org/MI22/conferencedetails/image-guided-procedures?enableBackToBrowse=true
 
-SciKit-SurgeryGlenoid is an opensource toolkit for the measurement of Glenoid version 
-designed for applications in reconstructive shoulder surgery. The toolkit implements
-5 methods of Glenoid version measurement and quantification of shoulder joint 
-arthrosis taken from the literature. 
+Correct understanding of the geometry of the glenoid (the dish of the shoulder joint) is 
+key to successful planning of shoulder arthroplasty. This surgery typically involves 
+placing an implant in the shoulder joint to restore joint function. The most relevant 
+geometry is the glenoid version, which is the angular orientation of the glenoid surface 
+relative to the long axis of the scapula. However, measuring the glenoid version is not 
+straightforward and there are multiple measurement methods in the literature and used in 
+commercial planning software. 
+
+In this paper we introduce SciKit-SurgeryGlenoid, an open source toolkit for the measurement
+of Glenoid version. SciKit-SurgeryGlenoid contains implementations of the 4(5?) most 
+frequently used glenoid version measurement algorithms enabling easy and unbiased comparison of 
+the different techniques. We present the results of using the software on 10(?) sets of
+CT scans taken from patients who had undergone shoulder implant surgery.    
 
 Here we describe the software and present results based on manual segmentation of 10 
-patients. 
+patients. We further compare these results with those obtained from a commercial 
+implant planning software. 
 
-Future work will look at automating the segmentation process to build a largely automatic
+SciKit-SurgeryGlenoid currently requires manual segmentation of the relevant anatomical 
+features for each method. Future work will look at automating the segmentation process
+ to build an automatic and repeatable 
 pipeline from {CT} or radiograph to quantitative glenoid version measurement.
