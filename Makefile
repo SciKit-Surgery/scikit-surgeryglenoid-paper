@@ -13,7 +13,9 @@ INPUTS = surgeryglenoid-paper.tex \
 	 discussion.tex \
 	 acknowledgements.tex \
 
-FIGURES = 
+FIGURES = figures/planes.eps \
+	  figures/friedman.eps \
+	  figures/correctedfried.eps
 
 FIGURES_PNG = 
 
@@ -51,6 +53,9 @@ dependency_graph.png : dependency_graph.dot
 
 %.eps : %.dot
 	dot -Tps $< -o $@
+
+%.eps : %.png
+	convert $< $@
 
 dependency_graph.dot :
 	wget https://github.com/UCL/scikit-surgeryglenoid/raw/master/doc/dependency_graph.dot
