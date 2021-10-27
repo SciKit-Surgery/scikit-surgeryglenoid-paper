@@ -38,8 +38,8 @@ build/surgeryglenoid-paper.html : surgeryglenoid-paper.tex $(EXTERNALS) $(INPUTS
 	mkdir build/images
 	mv build/default.png build/anisitropic_error.png build/systematic_error.png build/images
 
-%.pdf : %.dvi
-	dvipdf $<
+%.pdf : %.tex
+	latexmk -pdf $<
 
 %.docx: %.tex surgeryglenoid-paper.bib
 	pandoc $< --bibliography=surgeryglenoid-paper.bib -V geometry:margin=2cm -V fontsize:11pt -o $@
