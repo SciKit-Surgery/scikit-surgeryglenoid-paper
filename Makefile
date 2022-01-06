@@ -21,7 +21,7 @@ FIGURES = figures/planes.png \
 FIGURES_PNG = 
 
 surgeryglenoid-paper.pdf : surgeryglenoid-paper.tex $(EXTERNALS) $(INPUTS) $(FIGURES)
-	latexmk -pdf -shell-escape $<
+	latexmk -pdf $<
 
 build/surgeryglenoid-paper.html : surgeryglenoid-paper.tex $(EXTERNALS) $(INPUTS) $(FIGURES_PNG) $(FIGURES)
 	latex -halt-on-error surgeryglenoid-paper.tex
