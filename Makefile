@@ -16,7 +16,8 @@ INPUTS = surgeryglenoid-paper.tex \
 
 FIGURES = figures/planes.png \
 	  figures/friedman.png \
-	  figures/correctedfried.png
+	  figures/correctedfried.png \
+	  figures/graphviz-f4a0d46f29de525cf2512540ebd2f3e3f3356594.png
 
 FIGURES_PNG = 
 
@@ -39,17 +40,8 @@ build/surgeryglenoid-paper.html : surgeryglenoid-paper.tex $(EXTERNALS) $(INPUTS
 %.docx: %.tex surgeryglenoid-paper.bib
 	pandoc $< --bibliography=surgeryglenoid-paper.bib -V geometry:margin=2cm -V fontsize:11pt -o $@
 
-%.png : %.eps 
-	gs -dSAFER -dEPSCrop -r600 -sDEVICE=pngalpha -o $@ $<
-
-%.eps : %.dot
-	dot -Tps $< -o $@
-
-%.eps : %.png
-	convert $< $@
-
-dependency_graph.dot :
-	wget https://github.com/UCL/scikit-surgeryglenoid/raw/master/doc/dependency_graph.dot
+figures/graphviz-f4a0d46f29de525cf2512540ebd2f3e3f3356594.png :
+	wget -P figures/ https://glenoidplanefitting.readthedocs.io/en/latest/_images/graphviz-f4a0d46f29de525cf2512540ebd2f3e3f3356594.png
 
 clean:
 	rm *.acr *.aux *.dvi *.glo *.ist *.lof *.log *.lot *.toc *.pdf *.ps *.out *.blg *.bbl build/surgeryglenoid-paper* build/*.png 
