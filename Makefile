@@ -17,7 +17,7 @@ INPUTS = surgeryglenoid-paper.tex \
 FIGURES = figures/planes.png \
 	  figures/friedman.png \
 	  figures/correctedfried.png \
-	  figures/graphviz-f4a0d46f29de525cf2512540ebd2f3e3f3356594.png
+	  figures/dep_graph.png
 
 FIGURES_PNG = 
 
