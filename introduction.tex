@@ -7,14 +7,25 @@ geometry is the glenoid version, which is the angular orientation of the glenoid
 relative to the long axis of the scapula in the horizontal (axial) plane. 
 However, measuring the glenoid version is not
 straightforward and there are multiple measurement methods in the literature and used in
-commercial planning software. Several papers look at the effect of using 
-different methods for measuring glenoid version and propose their own 
+commercial planning software. 
+
+Glenoid version can be computed from {2D} radiographs or from {3D} {CT} scans.
+The use of radiographs for glenoid measurement has been shown to be less 
+reliable that {CT} based methods \cite{nyffeler2003measurement}, so 
+most modern approaches use {CT} scans for glenoid version measurement. 
+Methods using {CT} scans can be divided into {2D} methods that 
+use a single axial slice to estimate glenoid version and {3D} 
+methods that use landmarks points in multiple slices. {2D} methods 
+have been shown to be more susceptible to positional variance \cite{bryce2010two}, 
+however there is not as yet an agreed single method for glenoid version measurement.
+There are many papers comparing the effect of use 
+different methods for measuring glenoid version and proposing their own 
 methods, \cite{PMID:33330245, PMID:32010231, PMID:29298261, PMID:33554174}. 
-Different approaches are also implemented by implant vendors and commercial 
-software suppliers \cite{blueprint, exactech, djosurgical} however these methods can 
-be somewhat opaque.
+Different methods are also implemented by implant vendors and commercial 
+software suppliers \cite{blueprint, exactech, djosurgical} however the exact methods
+used by in each case are not published. 
 
 There is a need therefore for reliable open source implementations of the various 
 methods for measuring glenoid version to enable further research comparing the methods. 
-We have developed \sksglenoid to meet this need and herein present early results of its 
+We have developed \sksglenoid to meet this need and herein present early results of \sksglenoidns's 
 use on retrospectively gathered data.
