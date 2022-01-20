@@ -6,8 +6,9 @@
 rapid development and future deployment into a clinically useable application. 
 Development was kick started using the \sksurgery Python Template \cite{doel_tom_2022_5879146} enabling the bulk of the development and testing to be performed during a 10 week summer internship with minimal prior experience of Python or software development. \sksurgery also includes template libraries for C++ projects \cite{dowrick2021cmakecatchtemplate}.
 
-\sksurgery is made up of multiple Python libraries and currently supports clinical 
-guidance systems \cite{schneider2020comparison}, research platforms for registration \cite{thompson2021fiducial} and ultrasound simulation \cite{thompson2020snappysonic}. 
+\sksurgery is made up of multiple Python libraries that can be assembled into 
+various applications. Current examples of \sksurgeryns's use include clinical 
+guidance systems \cite{schneider2020comparison}, research platforms for registration \cite{thompson2021fiducial} and ultrasound simulators \cite{thompson2020snappysonic}. 
 Figure \ref{fig:deps} shows the immediate dependencies of \sksglenoidns. The most significant dependencies are NumPy\cite{2020NumPy-Array} which is used for the version calculation, and {VTK}\cite{Schroeder:1998:VTO:272980} which is used for visualising the results. SciKit-SurgeryCore provides configuration helpers for the user interface. SciKit-SurgeryVTK provides some helpful loaders and shape primitives, but it may be useful to remove this dependency as it would significantly simplify the dependency graph.
 
 \begin{figure}
@@ -16,3 +17,4 @@ Figure \ref{fig:deps} shows the immediate dependencies of \sksglenoidns. The mos
 			\caption{\label{fig:deps}The dependency graph for SciKit-SurgeryGlenoid. SciKit-Surgery dependencies are shown in blue, whilst 3rd party dependencies are shown in grey.}
 	\end{center}
 \end{figure}
+
