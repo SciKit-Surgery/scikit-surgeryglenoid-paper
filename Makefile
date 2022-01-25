@@ -9,7 +9,6 @@ INPUTS = surgeryglenoid-paper.tex \
 	 abstract_250.tex \
 	 introduction.tex \
 	 methods.tex \
-	 implementation.tex \
 	 results.tex \
 	 discussion.tex \
 	 acknowledgements.tex \
