@@ -8,7 +8,7 @@ input a file describing the anatomical position of the required landmark points.
 
 \begin{figure}
         \begin{center}
-                \includegraphics[width=0.85\linewidth]{figures/workflow.png}
+                \includegraphics[width=0.98\linewidth]{figures/workflow.png}
                         \caption{\label{fig:workflow}A workflow diagram describing the current workflow. Relevant landmarks 
 			are currently identified using 3DSlicer and passed to \sksglenoid via the command line. For the corrected Friedman method the points are manually identified 
 			a second time after identification of the new axial slice.}
@@ -49,10 +49,10 @@ The selection of the different landmark points for each method and calculations 
 			\caption{\label{fig:visvault2D}Vault Method Axial Slice}
 		\end{subfigure}	
 	\end{center}
-	\caption{\label{fig:visualisations}Visualisations of the 2 plane, Friedman and Vault methods and of new axial slice plane used for corrected Friedman method. Additional visualisations of the axial slices of hte Friedman and vault methods to show point selection. By default uses the colour blind friendly palette defined by Wong\cite{bang2011}}
+	\caption{\label{fig:visualisations}Visualisations of the 2 plane, Friedman and Vault methods and of new axial slice plane used for corrected Friedman method. Additional visualisations of the axial slices of the Friedman and vault methods to show point selection. By default, \sksglenoid uses the colour blind friendly palette defined by Wong\cite{bang2011}}
 \end{figure}
 
-For the Friedman and vault method both 3 points were chosen to form 2 lines. Both require the same two points at the edges of the glenoid fossa anteriorly and posteriorly (black points on \ref{fig:visfried} and \ref{fig:visvault}). For the Friedman method the third point was selected at the tip of the scapula, while for the vault method it was at the tip of the scapular vault. The point selection is done on a 2D axial slice (see \ref{fig:visfried2D} and \ref{fig:visvault2D}). Therefore, slice choice is important and in this case was selected as the axial slice at which the coracoid process is no longer visible. The Friedman line was formed with the medial point on the scapula and the midpoint between the glenoid fossa points, while the vault line was formed with the tip of the scapular vault and the same midpoint. The second line was formed across the glenoid fossa in both methods. The version was then calculated as the angle between the two lines. 
+For the Friedman and vault method 3 points were chosen to form 2 lines. Both require the same two points at the edges of the glenoid fossa anteriorly and posteriorly (black points on \ref{fig:visfried} and \ref{fig:visvault}). For the Friedman method the third point was selected at the tip of the scapula, while for the vault method it was at the tip of the scapular vault. The point selection is done on a 2D axial slice (see \ref{fig:visfried2D} and \ref{fig:visvault2D}). Therefore, slice choice is important and in this case was selected as the axial slice at which the coracoid process is no longer visible. The Friedman line was formed with the medial point on the scapula and the midpoint between the glenoid fossa points, while the vault line was formed with the tip of the scapular vault and the same midpoint. The second line was formed across the glenoid fossa in both methods. The version was then calculated as the angle between the two lines. 
 
 The corrected Friedman method requires the same anatomical landmark points as the conventional Friedman method, but on a corrected axial plane. This plane (blue plane in \ref{fig:visplanes}) should be perpendicular to the scapular plane which is formed by the same 3 points as the scapular plane for the two-plane method (black plane in \ref{fig:visplanes}). The new transverse scapular plane (blue plane in \ref{fig:viscorrfried}) was used to generate a new 2D image slice on which the same conventional Friedman landmark points were selected.
 
@@ -62,7 +62,7 @@ The corrected Friedman method requires the same anatomical landmark points as th
 %\input|"wget https://glenoidplanefitting.readthedocs.io/en/latest/_images/graphviz-f4a0d46f29de525cf2512540ebd2f3e3f3356594.png"
 \sksglenoid is built on top of the \sksurgery \cite{PMID:32436132} libraries which enabled
 rapid development and future deployment into a clinically useable application. 
-Development was kick started using the \sksurgery Python Template \cite{doel_tom_2022_5879146} enabling the bulk of the development and testing to be performed during a 10 week summer internship with minimal prior experience of Python or software development. \sksurgery also includes template libraries for C++ projects \cite{dowrick2021cmakecatchtemplate}.
+Development was kick started using the \sksurgery Python Template \cite{doel_tom_2022_5879146} enabling the bulk of the development and testing to be performed during a 10 week summer internship with minimal prior experience of Python or software development. Use of the Python Template encourages good software development practice \cite{schroeder2004software} from the outset of the development process. \sksurgery also includes template libraries for C++ projects \cite{dowrick2021cmakecatchtemplate}.
 
 \sksurgery is made up of multiple Python libraries that can be assembled into
 varied applications for research in image guided surgery. Some current examples 
