@@ -1,0 +1,830 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->  
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head>
+   <title>SciKit-SurgeryGlenoid, an Open Source Toolkit for Glenoid Version
+Measurement</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- charset=utf-8,html,xhtml --> 
+<meta name="src" content="surgeryglenoid-paper.tex" /> 
+<link rel="stylesheet" type="text/css" href="surgeryglenoid-paper.css" /> 
+<link href="basic.css" rel="stylesheet" type="text/css" /> 
+</head><body 
+>
+   <div class="maketitle">
+                                                                                             
+                                                                                             
+                                                                                             
+                                                                                             
+
+<h2 class="titleHead">SciKit-SurgeryGlenoid, an Open Source Toolkit for Glenoid
+Version Measurement</h2>
+<div class="author" ><span 
+class="cmr-12">Asta</span><span 
+class="cmr-12"> Olafsdottir</span><span 
+class="cmti-9">1</span><span 
+class="cmr-12">, Addie</span><span 
+class="cmr-12"> Majed</span><span 
+class="cmti-9">2</span><span 
+class="cmr-12">, David</span><span 
+class="cmr-12"> Butt</span><span 
+class="cmti-9">2</span><span 
+class="cmr-12">, Mark</span><span 
+class="cmr-12"> Falworth</span><span 
+class="cmti-9">2</span><span 
+class="cmr-12">, Matthew</span><span 
+class="cmr-12"> J.</span><span 
+class="cmr-12"> Clarkson</span><span 
+class="cmti-9">1</span><span 
+class="cmr-12">,</span>
+<span 
+class="cmr-12">Stephen</span><span 
+class="cmr-12"> Thompson</span><span 
+class="cmti-9">1</span> <br />
+<span 
+class="cmti-9">1</span>
+ <span 
+class="cmr-12">Wellcome/EPSRC Centre for Interventional and Surgical Science, University College London,</span>
+<span 
+class="cmr-12">United Kingdom</span><br />
+<span 
+class="cmti-9">2</span>
+ <span 
+class="cmr-12">The Royal National Orthopaedic Hospital NHS Trust</span><br />
+</div>
+<div class="date" ></div>
+   </div>
+<div class="center" 
+>
+<!--l. 108--><p class="noindent" >
+</p><!--l. 109--><p class="noindent" ><span 
+class="tcrm-1000">© </span>The Authors. Published by SPIE under a Creative Commons Attribution 4.0 International License.
+Distribution or reproduction of this work in whole or in part requires full attribution of the original
+publication, including its DOI. [DOI: 10.1117/XXX.XX.XXXXX]
+</p><!--l. 111--><p class="noindent" >Cite as: Asta Olafsdottir, Addie Majed, David Butt, Mark Falworth, Matthew J. Clarkson, Stephen Thompson,
+“SciKit-SurgeryGlenoid, an Open Source Toolkit for Glenoid Version Measurement” Proc. SPIE Medical
+Imaging 2022, Image-Guided Procedures, Robotic Interventions, and Modeling. Paper 12034-58 (Feb 2022).
+http://dx.doi.org/DOI</p></div>
+   <div 
+class="abstract" 
+>
+   <h3 class="likesectionHead"><a 
+ id="x1-1000"></a>ABSTRACT</h3>
+<!--l. 3--><p class="noindent" >Correct understanding of the geometry of the glenoid (the socket of the shoulder joint) is key to successful planning of
+shoulder replacement surgery. This surgery typically involves placing an implant in the shoulder joint to restore joint
+function. The most relevant geometry is the glenoid version, which is the angular orientation of the glenoid surface
+relative to the long axis of the scapula in the axial plane. However, measuring the glenoid version is not
+straightforward and there are multiple measurement methods in the literature and used in commercial planning
+software.
+</p><!--l. 1--><p class="indent" >   In this paper we introduce SciKit-SurgeryGlenoid, an open source toolkit for the measurement of glenoid version.
+SciKit-SurgeryGlenoid contains implementations of the 4 most frequently used glenoid version measurement algorithms
+enabling easy and unbiased comparison of the diﬀerent techniques. We present the results of using the
+software on 10 sets of pre-operative CT scans taken from patients who have subsequently undergone shoulder
+replacement surgery. We further compare these results with those obtained from a commercial implant planning
+software.
+</p><!--l. 13--><p class="indent" >   SciKit-SurgeryGlenoid currently requires manual segmentation of the relevant anatomical features for each method.
+Future work will look at automating the segmentation process to build an automatic and repeatable pipeline from CT or
+radiograph to quantitative glenoid version measurement.
+</p></div>
+                                                                                             
+                                                                                             
+<!--l. 1--><p class="noindent" ><span 
+class="cmbx-12">1.</span>
+</p>
+   <h3 class="sectionHead"><span class="titlemark">1   </span> <a 
+ id="x1-20001"></a>Introduction</h3>
+<!--l. 3--><p class="noindent" >Correct understanding of the geometry of the glenoid (the socket of the shoulder joint) is key to successful planning of
+shoulder replacement surgery. This surgery typically involves placing an implant in the shoulder joint to restore joint
+function. The most relevant geometry is the glenoid version, which is the angular orientation of the glenoid surface
+relative to the long axis of the scapula in the horizontal (axial) plane. However, measuring the glenoid version is not
+straightforward and there are multiple measurement methods in the literature and used in commercial planning
+software.
+</p><!--l. 12--><p class="indent" >   Glenoid version can be computed from 2D radiographs or from 3D CT scans. The use of radiographs for glenoid
+measurement has been shown to be less reliable that CT based methods,<span 
+class="cmr-7">18</span> so most modern approaches use CT scans for
+glenoid version measurement. Methods using CT scans can be divided into 2D methods that use a single axial slice to
+estimate glenoid version and 3D methods that use landmark points in multiple slices. 2D methods have
+been shown to be more susceptible to positional variance,<span 
+class="cmr-7">5</span>  however there is not as yet an agreed single
+method for glenoid version measurement. There are many papers comparing the use of diﬀerent methods for
+measuring glenoid version or proposing new methods.<span 
+class="cmr-7">4,7,24,25</span> Diﬀerent methods are also implemented by
+implant vendors and commercial software suppliers<span 
+class="cmr-7">1</span><span 
+class="cmr-7">–</span><span 
+class="cmr-7">3</span> however, the exact methods used in each case are not
+published.
+</p><!--l. 28--><p class="indent" >   There is a need therefore for reliable open source implementations of the various methods for measuring glenoid
+version to enable further research comparing the methods. We have developed SciKit-SurgeryGlenoid to
+meet this need and herein present early results of SciKit-SurgeryGlenoid’s use on retrospectively gathered
+data.
+<span 
+class="cmbx-12">2.</span>
+</p>
+   <h3 class="sectionHead"><span class="titlemark">2   </span> <a 
+ id="x1-30002"></a>Methods</h3>
+<!--l. 2--><p class="noindent" ><span 
+class="cmbx-12">2.1</span>
+</p>
+   <h4 class="subsectionHead"><span class="titlemark">2.1   </span> <a 
+ id="x1-40002.1"></a>Measuring Glenoid Version</h4>
+<!--l. 4--><p class="noindent" >SciKit-SurgeryGlenoid currently implements two 3D methods; the two-plane method described by Ganapathi et al.<span 
+class="cmr-7">13</span>
+and the 3D corrected Friedman method described by Budge et al.<span 
+class="cmr-7">6</span> SciKit-SurgeryGlenoid also implements two 2D
+methods; Friedman’s method<span 
+class="cmr-7">11</span> and the vault method described by Matsumura et al.<span 
+class="cmr-7">16</span> Each implementation can be
+accessed via a command line application which takes as input a ﬁle describing the anatomical position of the required
+landmark points.
+</p>
+   <div class="figure" 
+>
+                                                                                             
+                                                                                             
+<a 
+ id="x1-4001r1"></a>
+                                                                                             
+                                                                                             
+<div class="center" 
+>
+<!--l. 10--><p class="noindent" >
+</p><!--l. 11--><p class="noindent" > <img 
+src="figures/workflow.png" alt="pict"  
+style="width:47.8064em;"  />
+<a 
+ id="x1-4002"></a>
+<br /> </p><div class="caption" 
+><span class="id">Figure 1: </span><span  
+class="content">A workﬂow diagram describing the current workﬂow. Relevant landmarks are currently identiﬁed
+using 3DSlicer and passed to SciKit-SurgeryGlenoid via the command line. For the corrected Friedman method
+the points are manually identiﬁed a second time after identiﬁcation of the new axial slice.</span></div><!--tex4ht:label?: x1-4001r2 -->
+</div>
+                                                                                             
+                                                                                             
+   </div>
+<!--l. 18--><p class="indent" >   Although the longer term aim is to automate the identiﬁcation of landmark points, SciKit-SurgeryGlenoid currently
+requires the landmark points to be manually identiﬁed. Figure <a 
+href="#x1-4001r1">1<!--tex4ht:ref: fig:workflow --></a> gives a graphical description of the work ﬂow we
+used.
+</p><!--l. 21--><p class="indent" >   The selection of the diﬀerent landmark points for each method and calculations of version measurements were done
+as follows. For the two-plane method, 3 points were chosen for each plane. For the glenoid fossa plane the
+points selected were near the rim, one at the superior pole of the glenoid and two on the lower third of the
+glenoid anteriorly and posteriorly (black points on ﬁgure <a 
+href="#x1-4003r1">2a<!--tex4ht:ref: fig:visplanes --></a>). For the scapula plane, the 3 points included
+one at the center of the glenoid, another at the medial border of the scapula where the scapular spine
+intersects the scapular body, and a third at the inferior tip of the scapula (orange points on ﬁgure <a 
+href="#x1-4003r1">2a<!--tex4ht:ref: fig:visplanes --></a>). The
+glenoid version was then calculated as the angle between the plane of the glenoid fossa and the plane of the
+scapula.
+</p>
+   <div class="figure" 
+>
+                                                                                             
+                                                                                             
+<a 
+ id="x1-4009r2"></a>
+                                                                                             
+                                                                                             
+<div class="center" 
+>
+<!--l. 24--><p class="noindent" >
+</p>
+<div class="subfigure"><!--l. 26--><p class="noindent" > <img 
+src="figures/planes_vis.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-4003r1"></a>
+<span 
+class="cmr-9">(a) Two Plane Method</span>
+</p></div> <div class="subfigure"><!--l. 30--><p class="noindent" > <img 
+src="figures/friedman_vis.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-4004r2"></a>
+<span 
+class="cmr-9">(b) Friedman Method</span>
+</p></div> <div class="subfigure"><!--l. 34--><p class="noindent" > <img 
+src="figures/vault_vis.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-4005r3"></a>
+<span 
+class="cmr-9">(c) Vault Method</span>
+</p></div></div>
+<div class="center" 
+>
+<!--l. 38--><p class="noindent" >
+</p>
+<div class="subfigure"><!--l. 40--><p class="noindent" > <img 
+src="figures/corr_fried_vis.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-4006r4"></a>
+<span 
+class="cmr-9">(d) Corrected Friedman Method</span>
+</p></div> <div class="subfigure"><!--l. 44--><p class="noindent" > <img 
+src="figures/friedman_vis2D.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-4007r5"></a>
+<span 
+class="cmr-9">(e) Friedman Method Axial Slice</span>
+</p></div> <div class="subfigure"><!--l. 48--><p class="noindent" > <img 
+src="figures/vault_vis2D.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-4008r6"></a>
+<span 
+class="cmr-9">(f) Vault Method Axial Slice</span>
+</p></div></div>
+<a 
+ id="x1-4010"></a>
+<br /> <div class="caption" 
+><span class="id">Figure 2: </span><span  
+class="content">Visualisations of the 2 plane, Friedman and Vault methods and of new axial slice plane used for
+corrected Friedman method. Additional visualisations of the axial slices of the Friedman and vault methods to
+show point selection. By default, SciKit-SurgeryGlenoid uses the colour blind friendly palette deﬁned by Wong<span 
+class="cmr-7">29</span></span></div><!--tex4ht:label?: x1-4009r2 -->
+                                                                                             
+                                                                                             
+   </div>
+<!--l. 55--><p class="indent" >   For the Friedman and vault method 3 points were chosen to form 2 lines. Both require the same two points at the
+edges of the glenoid fossa anteriorly and posteriorly (black points on <a 
+href="#x1-4004r2">2b<!--tex4ht:ref: fig:visfried --></a> and <a 
+href="#x1-4005r3">2c<!--tex4ht:ref: fig:visvault --></a>). For the Friedman method the third
+point was selected at the tip of the scapula, while for the vault method it was at the tip of the scapular vault. The point
+selection was done on a 2D axial slice (see <a 
+href="#x1-4007r5">2e<!--tex4ht:ref: fig:visfried2D --></a> and <a 
+href="#x1-4008r6">2f<!--tex4ht:ref: fig:visvault2D --></a>). Therefore, slice choice is important and in this case was
+selected as the axial slice at which the coracoid process is no longer visible. The Friedman line was formed
+with the medial point on the scapula and the midpoint between the glenoid fossa points, while the vault
+line was formed with the tip of the scapular vault and the same midpoint. The second line was formed
+across the glenoid fossa in both methods. The version was then calculated as the angle between the two
+lines.
+</p><!--l. 57--><p class="indent" >   The corrected Friedman method requires the same anatomical landmark points as the conventional Friedman
+method, but on a corrected axial plane. This plane (blue plane in <a 
+href="#x1-4003r1">2a<!--tex4ht:ref: fig:visplanes --></a>) should be perpendicular to the scapular plane
+which is formed by the same 3 points as the scapular plane for the two-plane method (black plane in <a 
+href="#x1-4003r1">2a<!--tex4ht:ref: fig:visplanes --></a>). The new
+transverse scapular plane (blue plane in <a 
+href="#x1-4006r4">2d<!--tex4ht:ref: fig:viscorrfried --></a>) was used to generate a new 2D image slice on which the same conventional
+Friedman landmark points were selected.
+<span 
+class="cmbx-12">2.2</span>
+</p>
+   <h4 class="subsectionHead"><span class="titlemark">2.2   </span> <a 
+ id="x1-50002.2"></a>Software Implementation with SciKit-Surgery</h4>
+<!--l. 63--><p class="noindent" >SciKit-SurgeryGlenoid is built on top of the SciKit-Surgery<span 
+class="cmr-7">27</span> libraries which enabled rapid development and future
+deployment into a clinically useable application. Development was kick started using the SciKit-Surgery Python
+Template<span 
+class="cmr-7">9</span> enabling the bulk of the development and testing to be performed during a 10 week summer internship with
+minimal prior experience of Python or software development. Use of the Python Template encourages good software
+development practice<span 
+class="cmr-7">22</span> from the outset of the development process. SciKit-Surgery also includes template libraries for
+C++ projects.<span 
+class="cmr-7">10</span>
+</p><!--l. 67--><p class="indent" >   SciKit-Surgery is made up of multiple Python libraries that can be assembled into varied applications for research in
+image guided surgery. Some current examples of SciKit-Surgery’s use include clinical guidance systems,<span 
+class="cmr-7">20</span> research
+platforms for registration<span 
+class="cmr-7">26</span>  and ultrasound simulators.<span 
+class="cmr-7">28</span>  Figure <a 
+href="#x1-5001r3">3<!--tex4ht:ref: fig:deps --></a> shows the immediate dependencies of
+SciKit-SurgeryGlenoid. The most signiﬁcant dependencies are NumPy<span 
+class="cmr-7">14</span>  which is used for the version
+calculation, and VTK<span 
+class="cmr-7">21</span> which is used for visualising the results. SciKit-SurgeryCore provides conﬁguration
+helpers for the user interface. SciKit-SurgeryVTK provides some helpful loaders and shape primitives, but it
+may be useful to remove this dependency in the future as it would signiﬁcantly simplify the dependency
+graph.
+</p>
+   <div class="figure" 
+>
+                                                                                             
+                                                                                             
+<a 
+ id="x1-5001r3"></a>
+                                                                                             
+                                                                                             
+<div class="center" 
+>
+<!--l. 74--><p class="noindent" >
+</p><!--l. 75--><p class="noindent" > <img 
+src="figures/dep_graph.png" alt="pict"  
+style="width:29.26965em;"  />
+<a 
+ id="x1-5002"></a>
+<br /> </p><div class="caption" 
+><span class="id">Figure 3: </span><span  
+class="content">The dependency graph for SciKit-SurgeryGlenoid. SciKit-Surgery dependencies are shown in blue,
+whilst 3rd party dependencies are shown in grey.</span></div><!--tex4ht:label?: x1-5001r2 -->
+</div>
+                                                                                             
+                                                                                             
+   </div>
+<span 
+class="cmbx-12">2.3</span>
+   <h4 class="subsectionHead"><span class="titlemark">2.3   </span> <a 
+ id="x1-60002.3"></a>Experimental Validation</h4>
+<!--l. 82--><p class="noindent" >We tested the performance of SciKit-SurgeryGlenoid on 10 anonymised CT scans from patients eligible for shoulder
+replacement surgery. For each CT scan we performed segmentation and landmark annotation using 3DSlicer<span 
+class="cmr-7">15</span> and
+processed the resulting segmentation using SciKit-SurgeryGlenoid.
+</p><!--l. 88--><p class="indent" >   Statistical analysis was performed using GraphPad Prism software version 8.0 for Mac
+<span class="footnote-mark"><a 
+href="surgeryglenoid-paper2.html#fn1x0"><sup class="textsuperscript">1</sup></a></span><a 
+ id="x1-6001f1"></a>. The
+mean and standard deviation of each method was calculated and compared. Our current clinical practice uses planning
+software from DJO Surgical,<span 
+class="cmr-7">2</span>  so we compared the results from SciKit-SurgeryGlenoid with the results
+from the DJO Surgical software. Pearson’s correlation coeﬃcient was determined between the commercial
+software and each method. A repeated measures ANOVA was performed to determine any signiﬁcant
+diﬀerences in version measurements between the methods. Signiﬁcance level for all analyses was set at
+0.05.
+<span 
+class="cmbx-12">3.</span>
+</p>
+   <h3 class="sectionHead"><span class="titlemark">3   </span> <a 
+ id="x1-70003"></a>Results</h3>
+   <div class="table">
+                                                                                             
+                                                                                             
+<!--l. 4--><p class="indent" >   <a 
+ id="x1-7001r1"></a></p><hr class="float" /><div class="float" 
+>
+                                                                                             
+                                                                                             
+<div class="center" 
+>
+<!--l. 4--><p class="noindent" >
+</p>
+<div class="tabular"> <table id="TBL-1" class="tabular" 
+cellspacing="0" cellpadding="0"  
+><colgroup id="TBL-1-1g"><col 
+id="TBL-1-1" /></colgroup><colgroup id="TBL-1-2g"><col 
+id="TBL-1-2" /></colgroup><colgroup id="TBL-1-3g"><col 
+id="TBL-1-3" /></colgroup><tr 
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:normal; text-align:left;" id="TBL-1-1-1"  
+class="td11"> <!--l. 6--><p class="noindent" >Method                     </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-1-2"  
+class="td11"> <!--l. 6--><p class="noindent" >Mean Version             </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-1-3"  
+class="td11"> <!--l. 6--><p class="noindent" >Standard Deviation     </p></td></tr><tr 
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:normal; text-align:left;" id="TBL-1-2-1"  
+class="td11"> <!--l. 7--><p class="noindent" >Two Planes </p> </td><td  style="white-space:normal; text-align:left;" id="TBL-1-2-2"  
+class="td11"> <!--l. 7--><p class="noindent" >8.9<span 
+class="cmsy-7">∘</span>
+                  </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-2-3"  
+class="td11"> <!--l. 7--><p class="noindent" >4.7<span 
+class="cmsy-7">∘</span>              </p></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:normal; text-align:left;" id="TBL-1-3-1"  
+class="td11"> <!--l. 8--><p class="noindent" >Corrected Friedman      </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-3-2"  
+class="td11"> <!--l. 8--><p class="noindent" >8.4<span 
+class="cmsy-7">∘</span>              </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-3-3"  
+class="td11"> <!--l. 8--><p class="noindent" >6.5<span 
+class="cmsy-7">∘</span>              </p></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:normal; text-align:left;" id="TBL-1-4-1"  
+class="td11"> <!--l. 9--><p class="noindent" >Friedman                    </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-4-2"  
+class="td11"> <!--l. 9--><p class="noindent" >9.4<span 
+class="cmsy-7">∘</span>              </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-4-3"  
+class="td11"> <!--l. 9--><p class="noindent" >7.4<span 
+class="cmsy-7">∘</span>              </p></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-5-"><td  style="white-space:normal; text-align:left;" id="TBL-1-5-1"  
+class="td11"> <!--l. 10--><p class="noindent" >Vault                         </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-5-2"  
+class="td11"> <!--l. 10--><p class="noindent" >12.3<span 
+class="cmsy-7">∘</span>             </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-5-3"  
+class="td11"> <!--l. 10--><p class="noindent" >7.7<span 
+class="cmsy-7">∘</span>              </p></td>
+</tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-6-"><td  style="white-space:normal; text-align:left;" id="TBL-1-6-1"  
+class="td11"> <!--l. 11--><p class="noindent" >Commercial software     </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-6-2"  
+class="td11"> <!--l. 11--><p class="noindent" >9.9<span 
+class="cmsy-7">∘</span>              </p></td><td  style="white-space:normal; text-align:left;" id="TBL-1-6-3"  
+class="td11"> <!--l. 11--><p class="noindent" >6.1<span 
+class="cmsy-7">∘</span>              </p></td>
+</tr><tr 
+class="hline"><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-7-"><td  style="white-space:normal; text-align:left;" id="TBL-1-7-1"  
+class="td11">                      </td></tr></table></div></div>
+<a 
+ id="x1-7002"></a>
+<br /> <div class="caption" 
+><span class="id">Table 1: </span><span  
+class="content">A comparison of the results of each method tested on 10 retrospective patients</span></div><!--tex4ht:label?: x1-7001r3 -->
+                                                                                             
+                                                                                             
+   </div><hr class="endfloat" />
+   </div>
+<!--l. 19--><p class="indent" >   Table <a 
+href="#x1-7001r1">1<!--tex4ht:ref: tab:results --></a> presents the results of using SciKit-SurgeryGlenoid on 10 patients. The version measured using the planes
+method has a mean glenoid version of 8.9<span 
+class="cmsy-7">∘</span>(SD, 4.7<span 
+class="cmsy-7">∘</span>; range, 5<span 
+class="cmsy-7">∘</span>to 20.9<span 
+class="cmsy-7">∘</span>), while mean glenoid version for the 3D corrected
+Friedman method was 8.4<span 
+class="cmsy-7">∘</span>(SD, 6.5<span 
+class="cmsy-7">∘</span>; range, -4.0<span 
+class="cmsy-7">∘</span>to 16.9<span 
+class="cmsy-7">∘</span>). For the 2D methods, the mean glenoid version for the
+Friedman method was 9.4<span 
+class="cmsy-7">∘</span>(SD, 7.4<span 
+class="cmsy-7">∘</span>; range, -0.7<span 
+class="cmsy-7">∘</span>to 24<span 
+class="cmsy-7">∘</span>) and for the vault model was 12.3<span 
+class="cmsy-7">∘</span>(SD, 7.7<span 
+class="cmsy-7">∘</span>; range, 4<span 
+class="cmsy-7">∘</span>to 26<span 
+class="cmsy-7">∘</span>). In
+this case a positive value indicates retroversion while a negative value indicates anteversion of the glenoid. Overall, the
+3D methods resulted in both lower mean version values as well as lower variability, while the 2D methods revealed a
+slightly higher variability.
+</p><!--l. 33--><p class="indent" >   The measurements using these methods were also compared with version measurements on the same 10 patients
+using a commercial software.<span 
+class="cmr-7">2</span> The planes method (r = 0.90, p = 0.0004), corrected Friedman method (r = 0.83, p =
+0.0034), and conventional Friedman method (r = 0.79, p = 0.0064) all showed signiﬁcant correlation with the commercial
+software. The vault method did not show signiﬁcant correlation (r = 0.59, p = 0.074). The mean diﬀerence between the
+methods were overall not signiﬁcant (<span 
+class="cmmi-10">p &#x003E; </span>0<span 
+class="cmmi-10">.</span>05), except for the vault method (p = 0.03). Correlation plots are shown in
+Figure <a 
+href="#x1-7006r4">4<!--tex4ht:ref: fig:correl --></a>.
+</p>
+   <div class="figure" 
+>
+                                                                                             
+                                                                                             
+<a 
+ id="x1-7006r4"></a>
+                                                                                             
+                                                                                             
+<div class="center" 
+>
+<!--l. 44--><p class="noindent" >
+</p>
+<div class="subfigure"><!--l. 46--><p class="noindent" > <img 
+src="figures/planes.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-7003r1"></a>
+<span 
+class="cmr-9">(a) Two Planes Method</span>
+</p></div> <div class="subfigure"><!--l. 50--><p class="noindent" > <img 
+src="figures/correctedfried.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-7004r2"></a>
+<span 
+class="cmr-9">(b) Corrected Friedman Method</span>
+</p></div> <div class="subfigure"><!--l. 54--><p class="noindent" > <img 
+src="figures/friedman.png" alt="pict"  
+style="width:14.63483em;"  /> <a 
+ id="x1-7005r3"></a>
+<span 
+class="cmr-9">(c) Friedman Method</span>
+</p></div>
+<a 
+ id="x1-7007"></a>
+<br /> <div class="caption" 
+><span class="id">Figure 4: </span><span  
+class="content">The Pearson correlation between the commercial software and the 3 methods that gave a statistically
+signiﬁcant result.</span></div><!--tex4ht:label?: x1-7006r3 -->
+</div>
+                                                                                             
+                                                                                             
+   </div>
+<span 
+class="cmbx-12">4.</span>
+   <h3 class="sectionHead"><span class="titlemark">4   </span> <a 
+ id="x1-80004"></a>Discussion</h3>
+<!--l. 3--><p class="noindent" >There are several methods that have been proven to be accurate in preoperative measurement of the glenoid version.
+Speciﬁcally, 3D methods have become the standard as they provide a higher accuracy accounting for the positional errors
+during image acquisition (Budge et al.,<span 
+class="cmr-7">6</span> Moineau et al.<span 
+class="cmr-7">17</span>). Testing the most common 2D and 3D methods using the
+SciKit-SurgeryGlenoid toolkit allowed for an evaluation of its eﬀectiveness in comparing these methods. The early results
+presented are consistent with previously reported results (Matsumura et al.,<span 
+class="cmr-7">16</span> Budge et al.,<span 
+class="cmr-7">6</span> Ganapathi et
+al.<span 
+class="cmr-7">13</span>).
+</p><!--l. 13--><p class="indent" >   While the mean version did not show any signiﬁcant diﬀerence between most methods, this could be due to the small
+sample size used in this case. However, it is notable that the 3D methods reveal slightly lower version means and
+lower standard deviations which could prove signiﬁcant when more scans are analysed with additional
+observers.
+</p><!--l. 18--><p class="indent" >   From the Pearson correlation coeﬃcient, signiﬁcant correlation between the commercial software and 3 out
+of the 4 methods was seen. The vault method showing little correlation with the commercial software
+could be due to its much higher mean version value. The vault method tends to overestimate the glenoid
+version as has been previously reported by several studies (Cunningham et al.,<span 
+class="cmr-7">8</span>  Matsumura et al.<span 
+class="cmr-7">16</span>).
+The correlation tests prove however that there is good agreement between SciKit-SurgeryGlenoid and the
+commercial software already in use, indicating accuracy and credibility of this toolkit. While this can be a
+good indicator of reliability, further measurements using this software by diﬀerent observers would be
+needed to be able to test inter and intra observer reliability. However, SciKit-SurgeryGlenoid proves to be
+promising in providing an unbiased way of comparing the many diﬀerent methods available to measure glenoid
+version.
+</p><!--l. 32--><p class="indent" >   Limitations of this initial testing of SciKit-SurgeryGlenoid include the small sample size used. A study with a wider
+range of CT scans could reveal better understanding of the software’s reliability. Additionally, as points for each method
+were selected manually, there are some inaccuracies that arise which could be better understood with repeated
+measurements and multiple observers.
+</p><!--l. 38--><p class="noindent" ><span 
+class="cmbx-12">5.</span>
+</p>
+   <h3 class="sectionHead"><span class="titlemark">5   </span> <a 
+ id="x1-90005"></a>Conclusion</h3>
+<!--l. 39--><p class="noindent" >SciKit-SurgeryGlenoid provides a useful resource for shoulder arthroplasty. Future work could look at either automating
+the segmentation process using state of the art registration algorithms<span 
+class="cmr-7">12</span> to create a fully automatic pipeline, or at
+integrating the library with 3DSlicer to create a “slicelet” based application, similar to our previous work<span 
+class="cmr-7">23</span> in skull base
+navigation.
+</p><!--l. 1--><p class="noindent" ><span 
+class="cmbx-12">6.</span>
+</p>
+   <h3 class="sectionHead"><span class="titlemark">6   </span> <a 
+ id="x1-100006"></a>Open Access and Open Data</h3>
+<!--l. 2--><p class="noindent" >This research was funded in whole, or in part, by the Wellcome Trust [203145Z/16/Z]. For the purpose of Open Access,
+the author has applied a CC BY public copyright licence to any Author Accepted Manuscript version arising from this
+submission.
+</p><!--l. 5--><p class="indent" >   The data described in Sections <a 
+href="#x1-60002.3">2.3<!--tex4ht:ref: sec:exp_methods --></a> and <a 
+href="#x1-70003">3<!--tex4ht:ref: sec:results --></a> consist of anonymised patient scans. The original scans cannot be shared,
+but data derived from them will be made available in order to allow replication of our results. The software and derived
+data have been archived on Zenodo.<span 
+class="cmr-7">19</span>
+                                                                                             
+                                                                                             
+</p><!--l. 10--><p class="noindent" ><span 
+class="cmbx-12">7.</span>
+</p>
+   <h3 class="sectionHead"><span class="titlemark">7   </span> <a 
+ id="x1-110007"></a>Acknowledgements</h3>
+<!--l. 11--><p class="noindent" >This work is supported by the Wellcome/EPSRC Centre for Interventional and Surgical Sciences (WEISS)
+[203145Z/16/Z].
+</p><!--l. 1--><p class="noindent" >
+</p>
+   <h3 class="likesectionHead"><a 
+ id="x1-120007"></a>REFERENCES</h3>
+<!--l. 1--><p class="noindent" >
+    </p><div class="thebibliography">
+    <p class="bibitem" ><span class="biblabel">
+ 1. <span class="bibsp">   </span></span><a 
+ id="Xblueprint"></a>Blueprint  3D  planning  software.   <a 
+href="https://www.wright.com/blueprint-3d-planning-psi-system" class="url" ><span 
+class="cmtt-10">https://www.wright.com/blueprint-3d-planning-psi-system</span></a>.
+    Accessed: 2021-07-27
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 2. <span class="bibsp">   </span></span><a 
+ id="Xdjosurgical"></a>DJO surgical. <a 
+href="https://www.djoglobal.com/our-brands/djo-surgical" class="url" ><span 
+class="cmtt-10">https://www.djoglobal.com/our-brands/djo-surgical</span></a>. Accessed: 2021-08-04
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 3. <span class="bibsp">   </span></span><a 
+ id="Xexactech"></a>Exactech  equinox.   <a 
+href="https://www.exac.com/extremities/equinoxe-platform-system/" class="url" ><span 
+class="cmtt-10">https://www.exac.com/extremities/equinoxe-platform-system/</span></a>.   Accessed:
+    2021-07-27
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 4. <span class="bibsp">   </span></span><a 
+ id="XPMID:29298261"></a>Boileau, P., Cheval, D., Gauci, M.O., Holzer, N., Chaoui, J., Walch, G.: Automated three-dimensional
+    measurement of glenoid version and inclination in arthritic shoulders. The Journal of bone and joint surgery.
+    American volume <span 
+class="cmbx-10">100</span>(1), 57—65 (2018). URL <a 
+href="https://doi.org/10.2106/jbjs.16.01122" class="url" ><span 
+class="cmtt-10">https://doi.org/10.2106/jbjs.16.01122</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 5. <span class="bibsp">   </span></span><a 
+ id="Xbryce2010two"></a>Bryce, C.D., Davison, A.C., Lewis, G.S., Wang, L., Flemming, D.J., Armstrong, A.D.: Two-dimensional
+    glenoid version measurements vary with coronal and sagittal scapular rotation. JBJS <span 
+class="cmbx-10">92</span>(3), 692–699 (2010)
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 6. <span class="bibsp">   </span></span><a 
+ id="XBUDGE2011577"></a>Budge, M.D., Lewis, G.S., Schaefer, E., Coquia, S., Flemming, D.J., Armstrong, A.D.: Comparison
+    of standard two-dimensional and three-dimensional corrected glenoid version measurements.  Journal of
+    Shoulder and Elbow Surgery <span 
+class="cmbx-10">20</span>(4), 577–583 (2011). URL <a 
+href="https://doi.org/10.1016/j.jse.2010.11.003" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1016/j.jse.2010.11.003</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 7. <span class="bibsp">   </span></span><a 
+ id="XPMID:33330245"></a>Choi, C.H., Kim, H.C., Kang, D., Kim, J.Y.: Comparative study of glenoid version and inclination
+    using two-dimensional images from computed tomography and three-dimensional reconstructed bone models.
+    Clinics in shoulder and elbow <span 
+class="cmbx-10">23</span>(3), 119—124 (2020). URL <a 
+href="https://doi.org/10.5397/cise.2020.00220" class="url" ><span 
+class="cmtt-10">https://doi.org/10.5397/cise.2020.00220</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 8. <span class="bibsp">   </span></span><a 
+ id="XPMID:29778592"></a>Cunningham,  G.,  Freebody,  J.,  Smith,  M.M.,  Taha,  M.E.,  Young,  A.A.,  Cass,  B.,  Giuﬀre,  B.:
+    Comparative analysis of 2 glenoid version measurement methods in variable axial slices on 3-dimensionally
+    reconstructed computed tomography scans.  Journal of shoulder and elbow surgery <span 
+class="cmbx-10">27</span>(10), 1809—1815
+    (2018). URL <a 
+href="https://doi.org/10.1016/j.jse.2018.03.016" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1016/j.jse.2018.03.016</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 9. <span class="bibsp">   </span></span><a 
+ id="Xdoel_tom_2022_5879146"></a>Doel,  T.,  Thompson,  S.,  Dowrick,  T.,  Ahmad,  M.,  Clarkson,  M.:  Python  template  (2022).   URL
+    <a 
+href="https://doi.org/10.5281/zenodo.5879146" class="url" ><span 
+class="cmtt-10">https://doi.org/10.5281/zenodo.5879146</span></a>
+                                                                                             
+                                                                                             
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 10. <span class="bibsp">   </span></span><a 
+ id="Xdowrick2021cmakecatchtemplate"></a>Dowrick,    T.,    Ahmad,    M.,    Thompson,    S.,    Hetherington,    J.,    Cooper,    J.,    Clarkson,
+    M.: Cmakecatchtemplate: A c++ template project. Journal of Open Research Software <span 
+class="cmbx-10">9</span>(1) (2021). URL
+    <a 
+href="http://doi.org/10.5334/jors.319" class="url" ><span 
+class="cmtt-10">http://doi.org/10.5334/jors.319</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 11. <span class="bibsp">   </span></span><a 
+ id="XPMID:1522089"></a>Friedman, R., Hawthorne, K., Genez, B.: The use of computerized tomography in the measurement of
+    glenoid version. The Journal of bone and joint surgery. American volume <span 
+class="cmbx-10">74</span>(7), 1032—1037 (1992). URL
+    <a 
+href="http://europepmc.org/abstract/MED/1522089" class="url" ><span 
+class="cmtt-10">http://europepmc.org/abstract/MED/1522089</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 12. <span class="bibsp">   </span></span><a 
+ id="XFu2020"></a>Fu, Y., Brown, N.M., Saeed, S.U., Casamitjana, A., c. Baum, Z.M., Delaunay, R., Yang, Q., Grimwood,
+    A., Min, Z., Blumberg, S.B., Iglesias, J.E., Barratt, D.C., Bonmati, E., Alexander, D.C., Clarkson, M.J.,
+    Vercauteren, T., Hu, Y.: Deepreg: a deep learning toolkit for medical image registration.  Journal of Open
+    Source Software <span 
+class="cmbx-10">5</span>(55), 2705 (2020). URL <a 
+href="https://doi.org/10.21105/joss.02705" class="url" ><span 
+class="cmtt-10">https://doi.org/10.21105/joss.02705</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 13. <span class="bibsp">   </span></span><a 
+ id="XPMID:20933439"></a>Ganapathi, A., McCarron, J.A., Chen, X., Iannotti, J.P.: Predicting normal glenoid version from the
+    pathologic scapula: a comparison of 4 methods in 2- and 3-dimensional models.  Journal of shoulder and
+    elbow surgery <span 
+class="cmbx-10">20</span>(2), 234—244 (2011). URL <a 
+href="https://doi.org/10.1016/j.jse.2010.05.024" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1016/j.jse.2010.05.024</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 14. <span class="bibsp">   </span></span><a 
+ id="X2020NumPy-Array"></a>Harris, C.R., Millman, K.J., van der Walt, S.J., Gommers, R., Virtanen, P., Cournapeau, D., Wieser, E.,
+    Taylor, J., Berg, S., Smith, N.J., Kern, R., Picus, M., Hoyer, S., van Kerkwijk, M.H., Brett, M., Haldane, A.,
+    Fernández del Río, J., Wiebe, M., Peterson, P., Gérard-Marchant, P., Sheppard, K., Reddy, T., Weckesser,
+    W., Abbasi, H., Gohlke, C., Oliphant, T.E.: Array programming with NumPy. Nature <span 
+class="cmbx-10">585</span>, 357–362 (2020).
+    URL <a 
+href="https://doi.org/10.1038/s41586-020-2649-2" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1038/s41586-020-2649-2</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 15. <span class="bibsp">   </span></span><a 
+ id="XKikinis2014"></a>Kikinis, R., Pieper, S.D., Vosburgh, K.G.: 3D Slicer: A Platform for Subject-Speciﬁc Image Analysis,
+    Visualization,  and  Clinical  Support,  pp.  277–289.   Springer  New  York,  New  York,  NY  (2014).   URL
+    <a 
+href="https://doi.org/10.1007/978-1-4614-7657-3_19" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1007/978-1-4614-7657-3_19</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 16. <span class="bibsp">   </span></span><a 
+ id="XPMID:24618285"></a>Matsumura, N., Ogawa, K., Ikegami, H., Collin, P., Walch, G., Toyama, Y.: Computed tomography
+    measurement of glenoid vault version as an alternative measuring method for glenoid version.  Journal of
+    orthopaedic surgery and research <span 
+class="cmbx-10">9</span>(1), 17 (2014). URL <a 
+href="https://doi.org/10.1186/1749-799x-9-17" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1186/1749-799x-9-17</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 17. <span class="bibsp">   </span></span><a 
+ id="XPMID:22964089"></a>Moineau, G., Levigne, C., Boileau, P., Young, A., Walch, G., French Society for Shoulder and Elbow
+    (SOFEC): Three-dimensional measurement method of arthritic glenoid cavity morphology: feasibility and
+    reproducibility. Orthopaedics and traumatology, surgery and research : OTSR <span 
+class="cmbx-10">98</span>(6 Suppl), S139—45 (2012).
+    URL <a 
+href="https://doi.org/10.1016/j.otsr.2012.06.007" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1016/j.otsr.2012.06.007</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 18. <span class="bibsp">   </span></span><a 
+ id="Xnyffeler2003measurement"></a>Nyﬀeler, R.W., Jost, B., Pﬁrrmann, C.W., Gerber, C.: Measurement of glenoid version: conventional
+    radiographs versus computed tomography scans.  Journal of shoulder and elbow surgery <span 
+class="cmbx-10">12</span>(5), 493–496
+    (2003)
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 19. <span class="bibsp">   </span></span><a 
+ id="Xolafsdottir2022"></a>Olafsdottir,       A.,       Thompson,       S.:       Scikit-surgeryglenoid       (2022).                    URL
+    <a 
+href="https://doi.org/10.5281/zenodo.5901818" class="url" ><span 
+class="cmtt-10">https://doi.org/10.5281/zenodo.5901818</span></a>
+                                                                                             
+                                                                                             
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 20. <span class="bibsp">   </span></span><a 
+ id="Xschneider2020comparison"></a>Schneider, C., Thompson, S., Totz, J., Song, Y., Allam, M., Sodergren, M., Desjardins, A., Barratt, D.,
+    Ourselin, S., Gurusamy, K., et al.: Comparison of manual and semi-automatic registration in augmented
+    reality image-guided liver surgery: a clinical feasibility study. Surgical endoscopy <span 
+class="cmbx-10">34</span>(10), 4702–4711 (2020).
+    URL <a 
+href="https://doi.org/10.1007/s00464-020-07807-x" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1007/s00464-020-07807-x</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 21. <span class="bibsp">   </span></span><a 
+ id="XSchroeder:1998:VTO:272980"></a>Schroeder, W., Martin, K.M., Lorensen, W.E.: The Visualization Toolkit (2Nd Ed.): An Object-oriented
+    Approach to 3D Graphics. Prentice-Hall, Inc., Upper Saddle River, NJ, USA (1998)
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 22. <span class="bibsp">   </span></span><a 
+ id="Xschroeder2004software"></a>Schroeder, W.J., Ibáñez, L., Martin, K.M.: Software process: the key to developing robust, reusable and
+    maintainable open-source software.  In: 2004 2nd IEEE International Symposium on Biomedical Imaging:
+    Nano to Macro (IEEE Cat No. 04EX821), pp. 648–651. IEEE (2004)
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 23. <span class="bibsp">   </span></span><a 
+ id="XPMID:33937966"></a>Shapey,  J.,  Dowrick,  T.,  Delaunay,  R.,  Mackle,  E.C.,  Thompson,  S.,  Janatka,  M.,  Guichard,  R.,
+    Georgoulas, A., Pérez-Suárez, D., Bradford, R., Saeed, S.R., Ourselin, S., Clarkson, M.J., Vercauteren, T.:
+    Integrated multi-modality image-guided navigation for neurosurgery: open-source software platform using
+    state-of-the-art clinical hardware.  International journal of computer assisted radiology and surgery <span 
+class="cmbx-10">16</span>(8),
+    1347—1356 (2021). URL <a 
+href="https://doi.org/10.1007/s11548-021-02374-5" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1007/s11548-021-02374-5</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 24. <span class="bibsp">   </span></span><a 
+ id="XPMID:32010231"></a>Shukla,   D.R.,   McLaughlin,   R.J.,   Lee,   J.,   Nguyen,   N.T.V.,   Sanchez-Sotelo,   J.:   Automated
+    three-dimensional measurements of version, inclination, and subluxation. Shoulder &#x0026; elbow <span 
+class="cmbx-10">12</span>(1), 31—37
+    (2020). URL <a 
+href="https://doi.org/10.1177/1758573218825480" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1177/1758573218825480</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 25. <span class="bibsp">   </span></span><a 
+ id="XPMID:33554174"></a>Sprowls,  G.R.,  Wilson,  C.D.,  Stewart,  W.,  Hammonds,  K.A.P.,  Baruch,  N.H.,  Ward,  R.A.,  Robin,
+    B.N.: Intraoperative navigation and preoperative templating software are associated with increased glenoid
+    baseplate  screw  length  and  use  of  augmented  baseplates  in  reverse  total  shoulder  arthroplasty.   JSES
+    international <span 
+class="cmbx-10">5</span>(1), 102—108 (2021). URL <a 
+href="https://doi.org/10.1016/j.jseint.2020.09.003" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1016/j.jseint.2020.09.003</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 26. <span class="bibsp">   </span></span><a 
+ id="Xthompson2021fiducial"></a>Thompson, S., Dowrick, T., Ahmad, M., Opie, J., Clarkson, M.J.: Are ﬁducial registration error and
+    target  registration  error  correlated?  scikit-surgeryfred  for  teaching  and  research.   In:  Medical  Imaging
+    2021: Image-Guided Procedures, Robotic Interventions, and Modeling, vol. 11598, p. 115980U. International
+    Society for Optics and Photonics (2021). URL <a 
+href="https://doi.org/10.1117/12.2580159" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1117/12.2580159</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 27. <span class="bibsp">   </span></span><a 
+ id="XPMID:32436132"></a>Thompson, S., Dowrick, T., Ahmad, M., Xiao, G., Koo, B., Bonmati, E., Kahl, K., Clarkson, M.J.:
+    Scikit-surgery: compact libraries for surgical navigation. International journal of computer assisted radiology
+    and surgery <span 
+class="cmbx-10">15</span>(7), 1075—1084 (2020). URL <a 
+href="https://doi.org/10.1007/s11548-020-02180-5" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1007/s11548-020-02180-5</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 28. <span class="bibsp">   </span></span><a 
+ id="Xthompson2020snappysonic"></a>Thompson, S., Dowrick, T., Xiao, G., Ramalhinho, J., Robu, M., Ahmad, M., Taylor, D., Clarkson,
+    M.J.: Snappysonic: An ultrasound acquisition replay simulator.  Journal of Open Research Software <span 
+class="cmbx-10">8</span>(1)
+    (2020). URL <a 
+href="http://doi.org/10.5334/jors.289" class="url" ><span 
+class="cmtt-10">http://doi.org/10.5334/jors.289</span></a>
+    </p>
+    <p class="bibitem" ><span class="biblabel">
+ 29. <span class="bibsp">   </span></span><a 
+ id="Xbang2011"></a>Wong,   B.:   Points   of   view:   Color   blindness.       Nature   methods   <span 
+class="cmbx-10">8</span>,   441   (2011).       URL
+    <a 
+href="https://doi.org/10.1038/nmeth.1618" class="url" ><span 
+class="cmtt-10">https://doi.org/10.1038/nmeth.1618</span></a>
+</p>
+    </div>
+                                                                                             
+                                                                                             
+    
+</body></html> 
+
+                                                                                             
+
+

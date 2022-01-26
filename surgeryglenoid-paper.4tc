@@ -1,0 +1,18 @@
+\expandafter\ifx\csname doTocEntry\endcsname\relax \expandafter\endinput\fi
+\doTocEntry\toclikesection{}{\csname a:TocLink\endcsname{1}{x1-1000}{QQ2-1-1}{ABSTRACT}}{3}\relax 
+\doTocEntry\tocsection{1}{\csname a:TocLink\endcsname{1}{x1-20001}{QQ2-1-2}{Introduction}}{4}\relax 
+\doTocEntry\tocsection{2}{\csname a:TocLink\endcsname{1}{x1-30002}{QQ2-1-3}{Methods}}{4}\relax 
+\doTocEntry\tocsubsection{2.1}{\csname a:TocLink\endcsname{1}{x1-40002.1}{QQ2-1-4}{Measuring Glenoid Version}}{4}\relax 
+\doTocEntry\toclof{}{\csname a:TocLink\endcsname{1}{x1-4002}{}{\numberline {1}{\ignorespaces A workflow diagram describing the current workflow. Relevant landmarks are currently identified using 3DSlicer and passed to SciKit-SurgeryGlenoid via the command line. For the corrected Friedman method the points are manually identified a second time after identification of the new axial slice.\relax }}}{6}\relax 
+\doTocEntry\toclof{}{\csname a:TocLink\endcsname{1}{x1-4010}{}{\numberline {2}{\ignorespaces Visualisations of the 2 plane, Friedman and Vault methods and of new axial slice plane used for corrected Friedman method. Additional visualisations of the axial slices of the Friedman and vault methods to show point selection. By default, SciKit-SurgeryGlenoid uses the colour blind friendly palette defined by Wong\cite  {bang2011}\relax }}}{9}\relax 
+\doTocEntry\tocsubsection{2.2}{\csname a:TocLink\endcsname{1}{x1-50002.2}{QQ2-1-5}{Software Implementation with SciKit-Surgery}}{10}\relax 
+\doTocEntry\toclof{}{\csname a:TocLink\endcsname{1}{x1-5002}{}{\numberline {3}{\ignorespaces The dependency graph for SciKit-SurgeryGlenoid. SciKit-Surgery dependencies are shown in blue, whilst 3rd party dependencies are shown in grey.\relax }}}{12}\relax 
+\doTocEntry\tocsubsection{2.3}{\csname a:TocLink\endcsname{1}{x1-60002.3}{QQ2-1-6}{Experimental Validation}}{13}\relax 
+\doTocEntry\tocsection{3}{\csname a:TocLink\endcsname{1}{x1-70003}{QQ2-1-7}{Results}}{13}\relax 
+\doTocEntry\toclot{}{\csname a:TocLink\endcsname{1}{x1-7002}{}{\numberline {1}{\ignorespaces A comparison of the results of each method tested on 10 retrospective patients\relax }}}{15}\relax 
+\doTocEntry\toclof{}{\csname a:TocLink\endcsname{1}{x1-7007}{}{\numberline {4}{\ignorespaces The Pearson correlation between the commercial software and the 3 methods that gave a statistically significant result.\relax }}}{18}\relax 
+\doTocEntry\tocsection{4}{\csname a:TocLink\endcsname{1}{x1-80004}{QQ2-1-8}{Discussion}}{19}\relax 
+\doTocEntry\tocsection{5}{\csname a:TocLink\endcsname{1}{x1-90005}{QQ2-1-9}{Conclusion}}{19}\relax 
+\doTocEntry\tocsection{6}{\csname a:TocLink\endcsname{1}{x1-100006}{QQ2-1-10}{Open Access and Open Data}}{19}\relax 
+\doTocEntry\tocsection{7}{\csname a:TocLink\endcsname{1}{x1-110007}{QQ2-1-11}{Acknowledgements}}{20}\relax 
+\doTocEntry\toclikesection{}{\csname a:TocLink\endcsname{1}{x1-120007}{QQ2-1-12}{REFERENCES}}{20}\relax 
