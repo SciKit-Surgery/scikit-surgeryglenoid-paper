@@ -10,7 +10,7 @@ jobs:
 
       - name: Install and Build 🔧 
         run: |
-          sudo apt-get install -y tex4ht texlive-bibtex-extra texlive-latex-extra graphviz ghostscript
+          sudo apt-get install -y tex4ht texlive-bibtex-extra texlive-latex-extra graphviz ghostscript latexmk
           make build/surgeryglenoid-paper.html
 
       - name: Deploy 🚀
